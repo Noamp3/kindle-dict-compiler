@@ -1,0 +1,52 @@
+<instructions>
+You are an expert bilingual lexicographer. Translate the following $num_entries dictionary entries from English into $target_lang.
+
+### Schema Input
+Each input line in <input_data> is a JSON object representing one entry:
+* `entry_id`: Numeric identifier (preserve exactly, do not change).
+* `$headword_field`: The $source_lang headword (preserve exactly, do not translate or change).
+* `$definition_source_field`: The English definition containing various senses and metadata to be translated into $target_lang.
+* `pos_hint`: (Optional) Grammatical category extracted from the source. Use this as a guide to choose the correct Hebrew part-of-speech tag.
+### Schema Output
+For each input line, you must output exactly one JSON object with these 4 fields in this exact order:
+1. `entry_id` (must match the input entry_id)
+2. `$headword_field` (must match the input headword)
+3. `analysis` (a brief Chain-of-Thought analysis of the source senses and POS)
+4. `$definition_target_field` (the natural, professional Hebrew translation)
+### Grammatical Tag Mapping for `pos_hint`
+When `pos_hint` is provided, always map it to the full, unshortened Hebrew tag in parentheses at the start of your translation:
+* "masculine noun" ➔ `(זכר)`
+* "feminine noun" ➔ `(נקבה)`
+* "transitive verb" ➔ `(פועל יוצא)`
+* "intransitive verb" ➔ `(פועל עומד)`
+* "reflexive verb" ➔ `(פועל)`
+* "adjective" ➔ `(תואר)`
+* "adverb" ➔ `(תואר הפועל)`
+* "preposition" ➔ `(מילת יחס)`
+* "conjunction" ➔ `(מילת קישור)`
+* "pronoun" ➔ `(כינוי גוף)`
+* If compound or missing ➔ Do not start with a grammatical tag.
+
+### Quality Constraints
+* **HTML Style & Layout Preservation**: The input definition contains structural HTML styling tags (`<b>`, `<i>`, `<blockquote>`, `<a>`, `<br/>`, `<sup>`, `<sub>`, `<div>`). You **MUST** preserve all HTML tags and their structural hierarchy *exactly*. Do not alter, omit, or hallucinate any tags. Translate ONLY the English text inside the tags, leaving Spanish words, numbers, and tags unchanged. While the HTML tags and structures must remain identical, the translated text inside them must flow in natural Right-to-Left (RTL) direction as welcomed and required when translating to Hebrew.
+* **Exhaustive Sense Preservation**: Translate ALL numbered senses (e.g., 1., 2., 3...) present in `$definition_source_field`. Do not summarize, omit, or shorten them.
+* **No Abbreviations**: Do NOT use short forms like ז', נ', פ"י, פ"ע, ת', תה"פ. Always output the full word inside parentheses.
+* **RTL/LTR Separation**: If a parenthesized tag (e.g. `(תואר)`, `(זכר)`) directly precedes a list number (e.g. `1.`), separate them with a single space (e.g., `(תואר) 1. ...`). Do NOT insert an em-dash (`—`) before a list number.
+* **Allowed Characters**: Output only Hebrew, Latin/Spanish, numbers, and standard punctuation. Never output foreign scripts (like Hindi/Devanagari, Arabic, or Cyrillic).
+* **No English/Spanish Leakage**: All regional register labels (like colloq, vulg, Méx, RPl) must be translated into Hebrew in parentheses (e.g. `(דיבורי)`, `(מקסיקו)`).
+</instructions>
+
+<translation_guidelines>
+$guidelines
+</translation_guidelines>
+
+<output_format>
+* Return JSONL only — one valid JSON object per line.
+* Do not wrap your response in markdown code blocks or backticks (no ```json).
+* No introductions, greetings, explanations, or postscripts.
+* Output exactly $num_entries lines, one per input entry.
+</output_format>
+
+<input_data>
+$payload
+</input_data>

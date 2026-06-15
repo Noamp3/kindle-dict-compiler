@@ -1,0 +1,62 @@
+# ==============================================================================
+# Gitignore configuration for Dictionary Translation & Compilation Repository
+# ==============================================================================
+# This configuration adopts a "deny-by-default" strategy, only allowing code, 
+# markdown files, and structural essence configurations, while ignoring heavy 
+# binary dictionaries, virtual environments, work datasets, and credentials.
+
+# 1. Ignore everything by default
+*
+
+# 2. Allow directories so Git can traverse them
+!*/
+
+# 3. Explicitly ignore folders we know we want to completely ignore
+# This improves Git performance by avoiding traversing these directories.
+.git/
+.venv/
+work/
+work2/
+scratch/*
+!scratch/kindlegen_win32.zip
+A_Spanish_English_Dictionary_Granada_University_Spain/
+__pycache__/
+**/__pycache__/
+
+# 4. Allow the essence and configuration files in the root
+!.gitignore
+!README.md
+!setup_guide.md
+!custom_dictionary_guide.md
+!requirements.txt
+!.env.example
+!TRANSLATION_STATUS.md
+!translation_guidelines.md
+!config.json
+!start_runners.sh
+!wait_and_build.sh
+
+# 5. Allow all Python scripts and test directories
+!*.py
+!**/*.py
+!tests/
+!tests/**
+!skills/
+!skills/**
+
+# 6. Allow all prompt templates
+!prompt_templates/
+!prompt_templates/**
+
+# 7. Allow all parsers code and documentation
+!parsers/
+!parsers/**
+
+# 8. Re-ignore build artifacts, credentials, virtualenvs, or standard IDE settings
+.env
+.env.*
+!.env.example
+*.py[cod]
+*$py.class
+.idea/
+.vscode/

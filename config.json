@@ -1,0 +1,52 @@
+{
+  "work_dir": "work",
+  "model": "gemma-4-31b-it",
+  "source_lang": {
+    "name": "Spanish",
+    "code": "es"
+  },
+  "target_lang": {
+    "name": "Hebrew",
+    "code": "he"
+  },
+  "fields": {
+    "headword": "headword_es",
+    "definition_source": "definition_en",
+    "definition_target": "definition_he",
+    "examples_source": "examples_en",
+    "examples_target": "examples_he"
+  },
+  "grammar_markers": [
+    "n.",
+    "adj.",
+    "v.",
+    "adv.",
+    "prep.",
+    "f.",
+    "m.",
+    "pl.",
+    "sing.",
+    "pron.",
+    "conj.",
+    "art.",
+    "sufijo",
+    "prefijo",
+    "n",
+    "adj",
+    "v",
+    "adv",
+    "prep",
+    "f",
+    "m",
+    "pl",
+    "sing"
+  ],
+  "kindle": {
+    "title": "Spanish Hebrew Dictionary",
+    "creator": "Granada University",
+    "publisher": "Antigravity Dictionary Builder",
+    "subject": "Dictionaries",
+    "description": "Spanish-Hebrew Dictionary compiled from Granada University dictionary",
+    "identifier": "es-he-dict-granada"
+  }
+}
