@@ -97,3 +97,35 @@ scratch\kindlegen\kindlegen.exe work\kindle_source\content.opf -o dictionary.prc
 # On Linux/macOS:
 scratch/kindlegen/kindlegen work/kindle_source/content.opf -o dictionary.prc
 ```
+
+---
+
+## ⚠️ Pitfalls, Gotchas & Solved Bugs Reference
+
+Future agents and developers should keep these solved layout, translation, and indexing bugs in mind to prevent regression issues:
+
+### 1. Bidirectional (BiDi) RTL Layout Flipping
+* **The Gotcha**: Kindle quick-lookup popup windows completely strip HTML `<head>` blocks and CSS stylesheets. 
+* **The Pitfall**: This causes Hebrew text to wrap left-to-right, aligning definitions to the left, and flips trailing punctuation or parentheses to the wrong side.
+* **The Solution**: 
+  * You **must** wrap target definitions and examples in block-level `<div>` elements with explicit inline styles (`dir="rtl" align="right" style="direction: rtl; text-align: right; unicode-bidi: embed;"`).
+  * List digits (e.g. `1.`, `2.`) directly preceding RTL text will flip visually (rendering as `.1`). The post-processor injects a **Left-to-Right Mark** (`\u200e` / Unicode 8206) immediately before list digits (e.g., `\u200e1.`) to bound and isolate directionality.
+
+### 2. Arabic Homoglyph Leakage
+* **The Gotcha**: Due to training data overlap, LLMs under translation tasks occasionally output Arabic characters that look identical to Hebrew characters in standard monospace console fonts (e.g., Arabic Noon `ن` or Arabic Beh `ب` instead of Hebrew Nun `נ` and Hebrew Bet `ב`).
+* **The Pitfall**: This is invisible to the eye but completely corrupts the dictionary index, making search lookups fail.
+* **The Solution**: The validation gate in [import_translated_batch.py](import_translated_batch.py) automatically scans for and translates these Arabic homoglyphs back to their Hebrew counterparts.
+
+### 3. POS Markers Polluting Index Keys
+* **The Gotcha**: If a raw headword is parsed with its grammatical part-of-speech marker intact (e.g., `"creer v."` or `"abad n."`), it compiles into a search key containing the POS tag.
+* **The Pitfall**: Selecting the word `"creer"` in a book highlights only the root word, meaning the search lookup fails to find `"creer v."`.
+* **The Solution**: The lookup generator filters out common grammatical markers from index keys using regex and configured lists in [build_kindle_dict.py](build_kindle_dict.py).
+
+### 4. Parallel Concurrency Lock Files
+* **The Gotcha**: Running dynamic parallel translator workers can lead to collision bugs where multiple scripts pick up the same batch.
+* **The Solution**: Use atomic lock files via `open(lock_file, "x")` to ensure runners claim batches safely. If the server crashes or restarts, **always** clean up stale `.lock` files before restarting the runners to prevent them from skipping pending batches.
+
+### 5. Windows Console CP1252 Mojibake
+* **The Gotcha**: Streaming Unicode logs/responses in a Windows terminal environment can corrupt Hebrew characters into CP1252 Mojibake.
+* **The Solution**: Ensure UTF-8 system overrides are set in python scripts (`sys.stdout.reconfigure(encoding="utf-8")`) and utilize CP1252 reverse-mapping recovery functions during parsing.
+
