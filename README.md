@@ -6,6 +6,13 @@ The translation engine leverages the official Google GenAI SDK (configured for `
 
 ---
 
+> [!IMPORTANT]
+> **LLM Agent-Optimized Repository**
+> This repository is fully optimized to be read and executed by **LLM coding agents** (e.g. Claude Code, Cursor, Copilot, Antigravity). It contains a structured agent skill inside [skills/dictionary-translator/SKILL.md](skills/dictionary-translator/SKILL.md). 
+> It is **highly recommended** to run this dictionary compilation workflow using an agent, equipping it with the instructions inside that skill directory.
+
+---
+
 ## 🏗️ Pipeline Architecture
 
 ```mermaid
