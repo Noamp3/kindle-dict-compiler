@@ -13,6 +13,14 @@ The translation engine leverages the official Google GenAI SDK (configured for `
 
 ---
 
+## 📥 Download Pre-Compiled Dictionary
+
+If you want to use the finished dictionary directly on your Kindle without running the translation and compilation pipeline yourself:
+* **[Download Spanish-Hebrew Dictionary (Version 9)](https://github.com/Noamp3/kindle-dict-compiler/releases/download/v9.0.0/oxford_es_he_v9.prc)** (24.4 MB)
+* *Sideload instructions can be found in the [Setup & Onboarding Guide](setup_guide.md#step-6-compile-the-prc).*
+
+---
+
 ## 🏗️ Pipeline Architecture
 
 ```mermaid
